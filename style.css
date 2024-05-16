@@ -1,0 +1,31 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    background-color: #0D0B0D;
+}
+div.title{
+    height: 10vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+}
+div.logo{
+    width: 50px; /* Adjust according to your design */
+    height: 50px; /* Adjust according to your design */
+    /* Add a background image */
+    background-image: url('./images.png');
+    /* Specify how the background image should be displayed */
+    background-size: cover;
+    margin-left: 10px;
+}
+div.name{
+    align-self: center;
+    margin-left: 10px;
+}
+a{
+    color: white;
+    font-family: Outfit, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    text-decoration:none;
+    font-size: medium;
+    font-weight: bold;
+}
