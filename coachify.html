@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>Gym-z</title>
+    <link rel="icon" href="./images.png" type="image/png">
 </head>
 <style>
     body {
@@ -62,7 +63,8 @@
     .load-bar {
         height: 3px;
         /* Adjust the thickness of the loading bar */
-        background: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2));
+        /* background: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2)); */
+        background-color: #5C4FF5;
         /* Gradient with light ends and dark middle */
     }
 
@@ -333,23 +335,82 @@
         </div>
     </div>
     <script>
-        let currentQuestion = 1; // Start with the first question
-        const totalQuestions = 15; // Total number of questions
+        let currentQuestion = 0; // Start with the first question
+        const totalQuestions = 2; // Total number of questions (update this to match your total questions)
+    
+        // Questions and options data
+        const quizData = [
+            {
+                question: "What's your fitness level?",
+                options: [
+                    { text: "Beginner", description: "You have been working out for 0-1 month." },
+                    { text: "Intermediate", description: "You have been working out for 1-24 months." },
+                    { text: "Advanced", description: "You have been working out for 24+ months." }
+                ]
+            },
+            {
+                question: "What's your goal?",
+                options: [
+                    { text: "Weight Loss", description: "Looking to shed some pounds." },
+                    { text: "Muscle Gain", description: "Building muscle mass and strength." },
+                    { text: "Overall Fitness", description: "Improving overall health and fitness." }
+                ]
+            }
+            // Add more questions and options as needed
+        ];
     
         // Function to update the question based on the current question number
         function updateQuestion() {
             const questionElement = document.querySelector('.question');
-            questionElement.innerHTML = `<h2 class="text-4xl sm:text-5xl text-left">Question ${currentQuestion}</h2>`;
-            
-            // Update load bar color
-            const loadBar = document.querySelector('.load-bar');
-            const percentage = (currentQuestion / totalQuestions) * 100;
-            loadBar.style.background = `linear-gradient(to right, #5C4FF5 ${percentage}%, transparent ${percentage}%)`;
+            const optionsElement = document.querySelector('.options');
+            const descElement = document.querySelector('.Desc');
+            const termsElement = document.querySelector('.terms-conditions');
+            const currentQuestionData = quizData[currentQuestion];
+    
+            questionElement.dataset.question = currentQuestion + 1; // Update question number
+    
+            questionElement.querySelector('h2').textContent = currentQuestionData.question;
+    
+            optionsElement.innerHTML = '';
+    
+            currentQuestionData.options.forEach((option, index) => {
+                const optionLabel = document.createElement('label');
+                optionLabel.htmlFor = `option${index + 1}`;
+                optionLabel.className = `op${index + 1}`;
+                optionLabel.innerHTML = `
+                    <div class="content">
+                        <h3>${option.text}</h3>
+                        <p class="op">${option.description}</p>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="option${index + 1}" class="custom-checkbox">
+                    </div>
+                `;
+                optionsElement.appendChild(optionLabel);
+            });
+    
+            // Clear previous event listeners to prevent multiple attachments
+            document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+                checkbox.removeEventListener('change', handleCheckboxChange);
+            });
+    
+            // Attach event listener to each checkbox
+            document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', handleCheckboxChange);
+            });
+    
+            optionsElement.appendChild(descElement);
+            optionsElement.appendChild(termsElement);
+    
+            // Update the progress bar
+            const progressBar = document.querySelector('.load-bar');
+            const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
+            progressBar.style.width = progressPercentage + '%';
         }
     
         // Function to handle clicking the "Next" button
         function nextQuestion() {
-            if (currentQuestion < totalQuestions) {
+            if (currentQuestion < totalQuestions - 1) {
                 currentQuestion++; // Move to the next question
                 updateQuestion(); // Update the displayed question
             } else {
@@ -359,11 +420,25 @@
     
         // Function to handle clicking the "Back" button
         function previousQuestion() {
-            if (currentQuestion > 1) {
+            if (currentQuestion > 0) {
                 currentQuestion--; // Move to the previous question
                 updateQuestion(); // Update the displayed question
             } else {
                 alert('This is the first question!'); // Alert when at the first question
+            }
+        }
+    
+        // Event listener for checkbox changes
+        function handleCheckboxChange() {
+            const checkboxId = this.id;
+            const checkbox = document.getElementById(checkboxId);
+            const option = checkbox.parentElement.parentElement;
+            if (checkbox.checked) {
+                option.style.backgroundColor = '#222048';
+                option.style.borderColor = '#5C4FF5'; // Change background color when checked
+            } else {
+                option.style.backgroundColor = 'transparent'; // Reset background color when unchecked
+                option.style.borderColor = 'rgba(30, 30, 30, 1)'; // Reset border color when unchecked
             }
         }
     
@@ -373,31 +448,8 @@
         // Event listener for the "Back" button
         document.querySelector('.back-button').addEventListener('click', previousQuestion);
     
-        // Function to handle checkbox change
-        function handleCheckboxChange(checkboxId) {
-            const checkbox = document.getElementById(checkboxId);
-            const option = checkbox.parentElement.parentElement;
-            if (checkbox.checked) {
-                option.style.backgroundColor = '#222048';
-                option.style.borderColor = '#5C4FF5' // Change background color when checked
-            } else {
-                option.style.backgroundColor = 'transparent'; // Reset background color when unchecked
-            }
-        }
-    
-        // Event listener for checkbox changes
-        document.querySelectorAll('.custom-checkbox').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                handleCheckboxChange(this.id);
-            });
-        });
-    
         // Call updateQuestion initially to display the first question
         updateQuestion();
     </script>
-    
-    
-    
-    
 </body>
 </html>
