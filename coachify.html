@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>Gym-z</title>
-    <link rel="icon" href="./images.png" type="image/png">
+    <link rel="icon" href="/static/images.png" type="image/png">
 </head>
 <style>
     body {
@@ -33,7 +33,7 @@
         height: 50px;
         /* Adjust according to your design */
         /* Add a background image */
-        background-image: url('./images.png');
+        background-image: url(/static/images.png);
         /* Specify how the background image should be displayed */
         background-size: cover;
         margin-left: 10px;
@@ -176,7 +176,7 @@
 
     /* Style for the custom checkbox when checked */
     .custom-checkbox:checked {
-        background-image: url(./imageedit_4_3329779529-removebg-preview.png);
+        background-image: url(/static/imageedit_4_3329779529-removebg-preview.png);
         background-color: #76ABAE;
         /* Change background color when checked */
         background-size: cover;
@@ -215,7 +215,7 @@
 
     /* Style for the custom checkbox when checked */
     .custom-checkbox-terms:checked {
-        background-image: url(./imageedit_4_3329779529-removebg-preview.png);
+        background-image: url(/static/imageedit_4_3329779529-removebg-preview.png);
         background-color: rgba(30, 30, 30, 1);
         /* Change background color when checked */
         background-size: cover;
@@ -234,7 +234,7 @@
         display: flex;
     }
 
-    div.button {
+    button.next {
         height: 50px;
         width: 230px;
         border-radius: 25px;
@@ -242,17 +242,9 @@
         margin-top: 10px;
         background-color: #76ABAE;
         cursor: pointer;
-    }
-
-    a.next {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        text-decoration: none;
         color: white;
         font-weight: bold;
+        border-style: none;
     }
 
     img.back-button {
@@ -290,7 +282,7 @@
         <div class="load-bar">
 
         </div>
-        <img src="./ChevronLeft.webp" alt="" class="back-button">
+        <img src="/static/ChevronLeft.webp" alt="" class="back-button">
         <div class="question">
             <h2 class="text-4xl sm:text-5xl text-left">What's your fitness level?</h2>
         </div>
@@ -335,7 +327,7 @@
             </div>
             <div class="terms-conditions">
                 <div class="check_box">
-                    <input type="checkbox" id="option3" class="custom-checkbox-terms">
+                    <input type="checkbox" id="terms-checkbox" class="custom-checkbox-terms">
                 </div>
                 <div class="terms_condi_text">
                     <p class="terms">By continuing, I agree with <a class="term" href="#">Terms of Use</a>, <a
@@ -344,14 +336,10 @@
                 </div>
             </div>
         </div>
-        <div class="button">
-            <a href="#" class="next">Next</a>
-        </div>
+        <button class="next">Next</button>
     </div>
     <script>
         let currentQuestion = 0; // Start with the first question
-        const totalQuestions = 2; // Total number of questions (update this to match your total questions)
-
         // Questions and options data
         const quizData = [
             {
@@ -380,6 +368,7 @@
             }
             // Add more questions and options as needed
         ];
+        const totalQuestions = quizData.length; // Total number of questions (update this to match your total questions)
 
         // Function to update the question based on the current question number
         function updateQuestion() {
@@ -402,12 +391,12 @@
                 optionLabel.innerHTML = `
                     <div class="content">
                         <h3>${option.text}</h3>
-                    <p class="op">${option.description}</p>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" id="option${index + 1}" class="custom-checkbox">
-                </div>
-            `;
+                        <p class="op">${option.description}</p>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="option${index + 1}" class="custom-checkbox">
+                    </div>
+                `;
                 optionsElement.appendChild(optionLabel);
             });
 
@@ -423,9 +412,9 @@
 
             // Update the description section
             descElement.innerHTML = `
-            <h4>${currentQuestionData.desc.title}</h4>
-            <p class="desc">${currentQuestionData.desc.text}</p>
-        `;
+                <h4>${currentQuestionData.desc.title}</h4>
+                <p class="desc">${currentQuestionData.desc.text}</p>
+            `;
 
             optionsElement.appendChild(descElement);
             optionsElement.appendChild(termsElement);
@@ -437,14 +426,51 @@
         }
 
         // Function to handle clicking the "Next" button
+        // Function to handle clicking the "Next" button
         function nextQuestion() {
-            if (currentQuestion < totalQuestions - 1) {
-                currentQuestion++; // Move to the next question
-                updateQuestion(); // Update the displayed question
+            const selectedOptions = document.querySelectorAll('.custom-checkbox:checked');
+            if (selectedOptions.length > 0) {
+                const selectedOptionTexts = Array.from(selectedOptions).map(option => option.parentElement.parentElement.querySelector('.content h3').textContent);
+                const response = {
+                    question: quizData[currentQuestion].question,
+                    answers: selectedOptionTexts
+                };
+
+                // Send the response to Flask using an HTTP POST request
+                fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(response)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to submit response');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data); // Log the response from the server
+                        currentQuestion++;
+                        if (currentQuestion < totalQuestions) {
+                            updateQuestion();
+                            console.log(currentQuestion)
+                        } else if (currentQuestion == totalQuestions) {
+                            // Redirect to the responses page when all questions are answered
+                            console.log(currentQuestion)
+                            window.location.href = '/responses';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to submit response. Please try again.');
+                    });
             } else {
-                alert('This is the last question!'); // Alert when reaching the last question
+                alert('Please select at least one option.');
             }
         }
+
 
         // Function to handle clicking the "Back" button
         function previousQuestion() {
@@ -471,7 +497,7 @@
         }
 
         // Event listener for the "Next" button
-        document.querySelector('.button a.next').addEventListener('click', nextQuestion);
+        document.querySelector('button.next').addEventListener('click', nextQuestion);
 
         // Event listener for the "Back" button
         document.querySelector('.back-button').addEventListener('click', previousQuestion);
@@ -479,6 +505,7 @@
         // Call updateQuestion initially to display the first question
         updateQuestion();
     </script>
+
 
 </body>
 
