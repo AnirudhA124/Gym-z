@@ -67,7 +67,7 @@
     }
 
     div.question {
-        margin-top: 50px;
+        margin-top: 20px;
         width: 100%;
         color: white;
     }
@@ -250,6 +250,12 @@
         color: white;
         font-weight: bold;
     }
+    img.back-button{
+        margin-top: 10px;
+        height: 32px;
+        width: 32px;
+        cursor: pointer;
+    }
 </style>
 
 <body>
@@ -268,6 +274,7 @@
         <div class="load-bar">
 
         </div>
+        <img src="./ChevronLeft.webp" alt="" class="back-button">
         <div class="question">
             <h2 class="text-4xl sm:text-5xl text-left">What's your fitness level?</h2>
         </div>
@@ -326,44 +333,71 @@
         </div>
     </div>
     <script>
-        const checkbox1 = document.getElementById('option1');
-        const op1 = document.querySelector('.op1');
-
-        checkbox1.addEventListener('change', function () {
-            if (this.checked) {
-                op1.style.backgroundColor = '#222048';
-                op1.style.borderColor = '#5C4FF5';
+        let currentQuestion = 1; // Start with the first question
+        const totalQuestions = 15; // Total number of questions
+    
+        // Function to update the question based on the current question number
+        function updateQuestion() {
+            const questionElement = document.querySelector('.question');
+            questionElement.innerHTML = `<h2 class="text-4xl sm:text-5xl text-left">Question ${currentQuestion}</h2>`;
+            
+            // Update load bar color
+            const loadBar = document.querySelector('.load-bar');
+            const percentage = (currentQuestion / totalQuestions) * 100;
+            loadBar.style.background = `linear-gradient(to right, #5C4FF5 ${percentage}%, transparent ${percentage}%)`;
+        }
+    
+        // Function to handle clicking the "Next" button
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                currentQuestion++; // Move to the next question
+                updateQuestion(); // Update the displayed question
             } else {
-                op1.style.backgroundColor = 'transparent';
-                op1.style.borderColor = 'rgba(30, 30, 30, 1)';
+                alert('This is the last question!'); // Alert when reaching the last question
             }
-        });
-
-        const checkbox2 = document.getElementById('option2');
-        const op2 = document.querySelector('.op2');
-
-        checkbox2.addEventListener('change', function () {
-            if (this.checked) {
-                op2.style.backgroundColor = '#222048';
-                op2.style.borderColor = '#5C4FF5';
+        }
+    
+        // Function to handle clicking the "Back" button
+        function previousQuestion() {
+            if (currentQuestion > 1) {
+                currentQuestion--; // Move to the previous question
+                updateQuestion(); // Update the displayed question
             } else {
-                op2.style.backgroundColor = 'transparent';
-                op2.style.borderColor = 'rgba(30, 30, 30, 1)';
+                alert('This is the first question!'); // Alert when at the first question
             }
-        });
-
-        const checkbox3 = document.getElementById('option3');
-        const op3 = document.querySelector('.op3');
-
-        checkbox3.addEventListener('change', function () {
-            if (this.checked) {
-                op3.style.backgroundColor = '#222048';
-                op3.style.borderColor = '#5C4FF5';
+        }
+    
+        // Event listener for the "Next" button
+        document.querySelector('.button a.next').addEventListener('click', nextQuestion);
+    
+        // Event listener for the "Back" button
+        document.querySelector('.back-button').addEventListener('click', previousQuestion);
+    
+        // Function to handle checkbox change
+        function handleCheckboxChange(checkboxId) {
+            const checkbox = document.getElementById(checkboxId);
+            const option = checkbox.parentElement.parentElement;
+            if (checkbox.checked) {
+                option.style.backgroundColor = '#222048';
+                option.style.borderColor = '#5C4FF5' // Change background color when checked
             } else {
-                op3.style.backgroundColor = 'transparent';
-                op3.style.borderColor = 'rgba(30, 30, 30, 1)';
+                option.style.backgroundColor = 'transparent'; // Reset background color when unchecked
             }
+        }
+    
+        // Event listener for checkbox changes
+        document.querySelectorAll('.custom-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                handleCheckboxChange(this.id);
+            });
         });
+    
+        // Call updateQuestion initially to display the first question
+        updateQuestion();
     </script>
+    
+    
+    
+    
 </body>
 </html>
