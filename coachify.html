@@ -79,9 +79,7 @@
         margin-bottom: 20px;
     }
 
-    .op1,
-    .op2,
-    .op3 {
+    .option {
         display: flex;
         width: 90%;
         color: white;
@@ -103,9 +101,7 @@
         /* Smooth transition for background color and border color change */
     }
 
-    .op1:hover,
-    .op2:hover,
-    .op3:hover {
+    .option:hover{
         background-color: #222048;
         /* Change background color on hover */
         border-color: #76ABAE;
@@ -264,6 +260,7 @@
         background-color: transparent;
         border-color: rgba(30, 30, 30, 1);
     }
+    
 </style>
 
 <body>
@@ -286,144 +283,111 @@
         <div class="question">
             <h2 class="text-4xl sm:text-5xl text-left">What's your fitness level?</h2>
         </div>
-        <div class="options">
-            <label for="option1">
-                <div class="op1">
-                    <div class="content">
-                        <h3>Beginner</h3>
-                        <p class="op">You have been working out for 0-1 month.</p>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" id="option1" class="custom-checkbox">
-                    </div>
-                </div>
-            </label>
-            <label for="option2">
-                <div class="op2">
-                    <div class="content">
-                        <h3>Intermediate</h3>
-                        <p class="op">You have been working out for 1-24 months.</p>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" id="option2" class="custom-checkbox">
-                    </div>
-                </div>
-            </label>
-            <label for="option3">
-                <div class="op3">
-                    <div class="content">
-                        <h3>Advanced</h3>
-                        <p class="op">You have been working out for 24+ months.</p>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" id="option3" class="custom-checkbox">
-                    </div>
-                </div>
-            </label>
-            <div class="Desc">
-                <h4>Tailed to Your Level of Experience</h4>
-                <p class="desc">This will help you get a workout plan that is tailored to your experience level.
-                </p>
+        <div class="options-container">
+            <!-- Options will be dynamically generated here -->
+        </div>
+        <div class="Desc">
+            <h4>Tailed to Your Level of Experience</h4>
+            <p class="desc">This will help you get a workout plan that is tailored to your experience level.
+            </p>
+        </div>
+        <div class="terms-conditions">
+            <div class="check_box">
+                <input type="checkbox" id="terms-checkbox" class="custom-checkbox-terms">
             </div>
-            <div class="terms-conditions">
-                <div class="check_box">
-                    <input type="checkbox" id="terms-checkbox" class="custom-checkbox-terms">
-                </div>
-                <div class="terms_condi_text">
-                    <p class="terms">By continuing, I agree with <a class="term" href="#">Terms of Use</a>, <a
-                            class="term" href="#">Privacy Policy</a> and our <a class="term" href="#">Refund Policy</a>
-                    </p>
-                </div>
+            <div class="terms_condi_text">
+                <p class="terms">By continuing, I agree with <a class="term" href="#">Terms of Use</a>, <a
+                        class="term" href="#">Privacy Policy</a> and our <a class="term" href="#">Refund Policy</a>
+                </p>
             </div>
         </div>
         <button class="next">Next</button>
     </div>
     <script>
         let currentQuestion = 0; // Start with the first question
-        // Questions and options data
-        const quizData = [
-            {
-                question: "What's your fitness level?",
-                options: [
-                    { text: "Beginner", description: "You have been working out for 0-1 month." },
-                    { text: "Intermediate", description: "You have been working out for 1-24 months." },
-                    { text: "Advanced", description: "You have been working out for 24+ months." }
-                ],
-                desc: {
-                    title: "Tailed to Your Level of Experience",
-                    text: "This will help you get a workout plan that is tailored to your experience level."
-                }
-            },
-            {
-                question: "What's your goal?",
-                options: [
-                    { text: "Weight Loss", description: "Looking to shed some pounds." },
-                    { text: "Muscle Gain", description: "Building muscle mass and strength." },
-                    { text: "Overall Fitness", description: "Improving overall health and fitness." }
-                ],
-                desc: {
-                    title: "Achieve Your Fitness Goals",
-                    text: "This will help you get a workout plan that is aligned with your fitness goals."
-                }
+    const quizData = [
+        {
+            question: "What's your fitness level?",
+            options: [
+                { text: "Beginner", description: "You have been working out for 0-1 month." },
+                { text: "Intermediate", description: "You have been working out for 1-24 months." },
+                { text: "Intermediate", description: "You have been working out for 1-24 months." },
+                { text: "Intermediate", description: "You have been working out for 1-24 months." }
+            ],
+            desc: {
+                title: "Tailed to Your Level of Experience",
+                text: "This will help you get a workout plan that is tailored to your experience level."
             }
-            // Add more questions and options as needed
-        ];
-        const totalQuestions = quizData.length; // Total number of questions (update this to match your total questions)
-
-        // Function to update the question based on the current question number
-        function updateQuestion() {
-            const questionElement = document.querySelector('.question');
-            const optionsElement = document.querySelector('.options');
-            const descElement = document.querySelector('.Desc');
-            const termsElement = document.querySelector('.terms-conditions');
-            const currentQuestionData = quizData[currentQuestion];
-
-            questionElement.dataset.question = currentQuestion + 1; // Update question number
-
-            questionElement.querySelector('h2').textContent = currentQuestionData.question;
-
-            optionsElement.innerHTML = '';
-
-            currentQuestionData.options.forEach((option, index) => {
-                const optionLabel = document.createElement('label');
-                optionLabel.htmlFor = `option${index + 1}`;
-                optionLabel.className = `op${index + 1}`;
-                optionLabel.innerHTML = `
-                    <div class="content">
-                        <h3>${option.text}</h3>
-                        <p class="op">${option.description}</p>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" id="option${index + 1}" class="custom-checkbox">
-                    </div>
-                `;
-                optionsElement.appendChild(optionLabel);
-            });
-
-            // Clear previous event listeners to prevent multiple attachments
-            document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
-                checkbox.removeEventListener('change', handleCheckboxChange);
-            });
-
-            // Attach event listener to each checkbox
-            document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', handleCheckboxChange);
-            });
-
-            // Update the description section
-            descElement.innerHTML = `
-                <h4>${currentQuestionData.desc.title}</h4>
-                <p class="desc">${currentQuestionData.desc.text}</p>
-            `;
-
-            optionsElement.appendChild(descElement);
-            optionsElement.appendChild(termsElement);
-
-            // Update the progress bar
-            const progressBar = document.querySelector('.load-bar');
-            const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
-            progressBar.style.width = progressPercentage + '%';
+        },
+        {
+            question: "What's your goal?",
+            options: [
+                { text: "Weight Loss", description: "Looking to shed some pounds." },
+                { text: "Muscle Gain", description: "Building muscle mass and strength." },
+                { text: "Overall Fitness", description: "Improving overall health and fitness." }
+            ],
+            desc: {
+                title: "Achieve Your Fitness Goals",
+                text: "This will help you get a workout plan that is aligned with your fitness goals."
+            }
         }
+        // Add more questions and options as needed
+    ];
+    const totalQuestions = quizData.length;
+
+    function updateQuestion() {
+        const questionElement = document.querySelector('.question');
+        const optionsElement = document.querySelector('.options-container');
+        const descElement = document.querySelector('.Desc');
+        const termsElement = document.querySelector('.terms-conditions');
+        const currentQuestionData = quizData[currentQuestion];
+
+        questionElement.dataset.question = currentQuestion + 1; // Update question number
+
+        questionElement.querySelector('h2').textContent = currentQuestionData.question;
+
+        optionsElement.innerHTML = '';
+
+        currentQuestionData.options.forEach((option, index) => {
+            const optionLabel = document.createElement('label');
+            optionLabel.htmlFor = `option${index + 1}`;
+            optionLabel.className = `option`;
+            optionLabel.innerHTML = `
+                <div class="content">
+                    <h3>${option.text}</h3>
+                    <p class="op">${option.description}</p>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="option${index + 1}" class="custom-checkbox">
+                </div>
+            `;
+            optionsElement.appendChild(optionLabel);
+        });
+
+        // Clear previous event listeners to prevent multiple attachments
+        document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+            checkbox.removeEventListener('change', handleCheckboxChange);
+        });
+
+        // Attach event listener to each checkbox
+        document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', handleCheckboxChange);
+        });
+
+        // Update the description section
+        descElement.innerHTML = `
+            <h4>${currentQuestionData.desc.title}</h4>
+            <p class="desc">${currentQuestionData.desc.text}</p>
+        `;
+
+        optionsElement.appendChild(descElement);
+        optionsElement.appendChild(termsElement);
+
+        // Update the progress bar
+        const progressBar = document.querySelector('.load-bar');
+        const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
+        progressBar.style.width = progressPercentage + '%';
+    }
 
         // Function to handle clicking the "Next" button
         // Function to handle clicking the "Next" button
