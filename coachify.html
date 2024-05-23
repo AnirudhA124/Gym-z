@@ -307,12 +307,10 @@
         let currentQuestion = 0; // Start with the first question
     const quizData = [
         {
-            question: "What's your fitness level?",
+            question: "Male or Female?",
             options: [
-                { text: "Beginner", description: "You have been working out for 0-1 month." },
-                { text: "Intermediate", description: "You have been working out for 1-24 months." },
-                { text: "Intermediate", description: "You have been working out for 1-24 months." },
-                { text: "Intermediate", description: "You have been working out for 1-24 months." }
+                { text: "Male", description: "" },
+                { text: "Female", description: "" },
             ],
             desc: {
                 title: "Tailed to Your Level of Experience",
@@ -320,11 +318,123 @@
             }
         },
         {
-            question: "What's your goal?",
+            question: "How long have you been working out?",
             options: [
-                { text: "Weight Loss", description: "Looking to shed some pounds." },
-                { text: "Muscle Gain", description: "Building muscle mass and strength." },
-                { text: "Overall Fitness", description: "Improving overall health and fitness." }
+                { text: "Beginner", description: "Been working out for less than a year." },
+                { text: "Intermediate", description: "Been working out for between a year and two." },
+                { text: "Advanced", description: "Been working out more than two years." }
+            ],
+            desc: {
+                title: "Achieve Your Fitness Goals",
+                text: "This will help you get a workout plan that is aligned with your fitness goals."
+            }
+        },
+        {
+            question: "What is your goal?",
+            options: [
+                { text: "Aesthetic", description: "" },
+                { text: "Power Lifter", description: "" },
+                { text: "Weight Loss", description: "" }
+            ],
+            desc: {
+                title: "Achieve Your Fitness Goals",
+                text: "This will help you get a workout plan that is aligned with your fitness goals."
+            }
+        },
+        {
+            question: "What are your primary target muscles?",
+            options: [
+                { text: "Back", description: "" },
+                { text: "Chest", description: "" },
+                { text: "Arms", description: "" },
+                { text: "Shoulders", description: "" },
+                { text: "Legs", description: "" },
+                { text: "Abs", description: "" }
+            ],
+            desc: {
+                title: "Achieve Your Fitness Goals",
+                text: "This will help you get a workout plan that is aligned with your fitness goals."
+            }
+        },
+        {
+            question: "What do you prefer?",
+            options: [
+                { text: "Strength Training", description: "" },
+                { text: "Cardio", description: "" },
+                { text: "Both", description: "" },
+            ],
+            desc: {
+                title: "Achieve Your Fitness Goals",
+                text: "This will help you get a workout plan that is aligned with your fitness goals."
+            }
+        },
+        {
+            question: "How would you describe your physical build right now?",
+            options: [
+                { text: "Skinny", description: "" },
+                { text: "Obese", description: "" },
+                { text: "Skinny Fat", description: "" },
+                { text: "Little Muscular", description: "" },
+                { text: "Muscular", description: "" }
+            ],
+            desc: {
+                title: "Achieve Your Fitness Goals",
+                text: "This will help you get a workout plan that is aligned with your fitness goals."
+            }
+        },
+        {
+            question: "Which describes you the best?",
+            options: [
+                { text: "Harder for you to loose weight than gain weight", description: "" },
+                { text: "Harder for you to gain weight than to lose it.", description: "" }
+            ],
+            desc: {
+                title: "Achieve Your Fitness Goals",
+                text: "This will help you get a workout plan that is aligned with your fitness goals."
+            }
+        },
+        {
+            question: "How many days can you realisticlly workout?",
+            options: [
+                { text: "2 Days", description: "" },
+                { text: "3-4 Days", description: "" },
+                { text: "4-5 Days", description: "" },
+                { text: "6 Days", description: "" }
+            ],
+            desc: {
+                title: "Achieve Your Fitness Goals",
+                text: "This will help you get a workout plan that is aligned with your fitness goals."
+            }
+        },
+        {
+            question: "What is your dietary preference?",
+            options: [
+                { text: "Vegetarian", description: "" },
+                { text: "Non-Vegetarian", description: "" },
+                { text: "Eggetarian", description: "" }
+            ],
+            desc: {
+                title: "Achieve Your Fitness Goals",
+                text: "This will help you get a workout plan that is aligned with your fitness goals."
+            }
+        },
+        {
+            question: "How much is daily water intake?",
+            options: [
+                { text: "Above 2L", description: "" },
+                { text: "Below 2L", description: "" }
+            ],
+            desc: {
+                title: "Achieve Your Fitness Goals",
+                text: "This will help you get a workout plan that is aligned with your fitness goals."
+            }
+        },
+        {
+            question: "How is your sleep cycle?",
+            options: [
+                { text: "7-8 Hours or more.", description: "" },
+                { text: "5-6 Hours.", description: "" },
+                { text: "Less than 5 hours.", description: "" }
             ],
             desc: {
                 title: "Achieve Your Fitness Goals",
