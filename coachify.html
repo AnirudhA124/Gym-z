@@ -312,6 +312,7 @@
                 { text: "Male", description: "" },
                 { text: "Female", description: "" },
             ],
+            requiredOptions: 1, // Number of required options for this question
             desc: {
                 title: "Tailed to Your Level of Experience",
                 text: "This will help you get a workout plan that is tailored to your experience level."
@@ -324,6 +325,7 @@
                 { text: "Intermediate", description: "Been working out for between a year and two." },
                 { text: "Advanced", description: "Been working out more than two years." }
             ],
+            requiredOptions: 1,
             desc: {
                 title: "Achieve Your Fitness Goals",
                 text: "This will help you get a workout plan that is aligned with your fitness goals."
@@ -336,6 +338,7 @@
                 { text: "Power Lifter", description: "" },
                 { text: "Weight Loss", description: "" }
             ],
+            requiredOptions: 1,
             desc: {
                 title: "Achieve Your Fitness Goals",
                 text: "This will help you get a workout plan that is aligned with your fitness goals."
@@ -351,6 +354,7 @@
                 { text: "Legs", description: "" },
                 { text: "Abs", description: "" }
             ],
+            requiredOptions: 3,
             desc: {
                 title: "Achieve Your Fitness Goals",
                 text: "This will help you get a workout plan that is aligned with your fitness goals."
@@ -363,6 +367,7 @@
                 { text: "Cardio", description: "" },
                 { text: "Both", description: "" },
             ],
+            requiredOptions: 1,
             desc: {
                 title: "Achieve Your Fitness Goals",
                 text: "This will help you get a workout plan that is aligned with your fitness goals."
@@ -377,6 +382,7 @@
                 { text: "Little Muscular", description: "" },
                 { text: "Muscular", description: "" }
             ],
+            requiredOptions: 1,
             desc: {
                 title: "Achieve Your Fitness Goals",
                 text: "This will help you get a workout plan that is aligned with your fitness goals."
@@ -388,6 +394,7 @@
                 { text: "Harder for you to loose weight than gain weight", description: "" },
                 { text: "Harder for you to gain weight than to lose it.", description: "" }
             ],
+            requiredOptions: 1,
             desc: {
                 title: "Achieve Your Fitness Goals",
                 text: "This will help you get a workout plan that is aligned with your fitness goals."
@@ -401,6 +408,7 @@
                 { text: "4-5 Days", description: "" },
                 { text: "6 Days", description: "" }
             ],
+            requiredOptions: 1,
             desc: {
                 title: "Achieve Your Fitness Goals",
                 text: "This will help you get a workout plan that is aligned with your fitness goals."
@@ -413,6 +421,7 @@
                 { text: "Non-Vegetarian", description: "" },
                 { text: "Eggetarian", description: "" }
             ],
+            requiredOptions: 1,
             desc: {
                 title: "Achieve Your Fitness Goals",
                 text: "This will help you get a workout plan that is aligned with your fitness goals."
@@ -424,6 +433,7 @@
                 { text: "Above 2L", description: "" },
                 { text: "Below 2L", description: "" }
             ],
+            requiredOptions: 1,
             desc: {
                 title: "Achieve Your Fitness Goals",
                 text: "This will help you get a workout plan that is aligned with your fitness goals."
@@ -436,6 +446,7 @@
                 { text: "5-6 Hours.", description: "" },
                 { text: "Less than 5 hours.", description: "" }
             ],
+            requiredOptions: 1,
             desc: {
                 title: "Achieve Your Fitness Goals",
                 text: "This will help you get a workout plan that is aligned with your fitness goals."
@@ -497,19 +508,34 @@
         const progressBar = document.querySelector('.load-bar');
         const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
         progressBar.style.width = progressPercentage + '%';
+
+        if (currentQuestion === 0) {
+            termsElement.style.display = 'flex'; // Display terms and conditions for the first question
+        } else {
+            termsElement.style.display = 'none'; // Hide terms and conditions for other questions
+        }
     }
 
         // Function to handle clicking the "Next" button
         // Function to handle clicking the "Next" button
+        // Function to handle clicking the "Next" button
         function nextQuestion() {
             const selectedOptions = document.querySelectorAll('.custom-checkbox:checked');
-            if (selectedOptions.length > 0) {
+            const requiredOptions = quizData[currentQuestion].requiredOptions;
+            const termsCheckbox = document.getElementById('terms-checkbox');
+        
+            if (!termsCheckbox.checked) {
+                alert('Please accept the terms before proceeding.');
+                return;
+            }
+        
+            if (selectedOptions.length <= requiredOptions && selectedOptions.length != 0) {
                 const selectedOptionTexts = Array.from(selectedOptions).map(option => option.parentElement.parentElement.querySelector('.content h3').textContent);
                 const response = {
                     question: quizData[currentQuestion].question,
                     answers: selectedOptionTexts
                 };
-
+        
                 // Send the response to Flask using an HTTP POST request
                 fetch('/submit', {
                     method: 'POST',
@@ -529,10 +555,8 @@
                         currentQuestion++;
                         if (currentQuestion < totalQuestions) {
                             updateQuestion();
-                            console.log(currentQuestion)
                         } else if (currentQuestion == totalQuestions) {
                             // Redirect to the responses page when all questions are answered
-                            console.log(currentQuestion)
                             window.location.href = '/responses';
                         }
                     })
@@ -541,9 +565,11 @@
                         alert('Failed to submit response. Please try again.');
                     });
             } else {
-                alert('Please select at least one option.');
+                alert(`You can select at most ${requiredOptions} option/options.`);
             }
         }
+        
+
 
 
         // Function to handle clicking the "Back" button
