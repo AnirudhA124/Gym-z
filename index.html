@@ -101,7 +101,7 @@
         /* Smooth transition for background color and border color change */
     }
 
-    .option:hover{
+    .option:hover {
         background-color: #222048;
         /* Change background color on hover */
         border-color: #76ABAE;
@@ -260,41 +260,59 @@
         background-color: transparent;
         border-color: rgba(30, 30, 30, 1);
     }
-    img.cake{
+
+    img.cake {
         margin-top: 20px;
         align-self: center;
         width: 25%;
         height: 25%;
     }
+    div.input-container{
+        width: 100%;
+    }
     .custom-input {
         margin-top: 20px;
         margin-bottom: 50px;
         align-self: center;
-        width: 300px;
-        font-size: 2.5rem;
+        width: 100%;
+        font-size: 2rem;
         border: none;
         outline: none;
         background-color: transparent;
         border-color: transparent;
         color: #808080;
-        text-align: center;
+        text-align: left;
     }
+
     .custom-input::-webkit-inner-spin-button,
-.custom-input::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-  h2.question{
-    font-size: 2.5rem;
-  }
-  span.underline{
-    text-decoration: underline;
-  }
-  button.next.disabled {
-    background-color: #CCCCCC; /* Light gray */
-    cursor: not-allowed;
-}
-    
+    .custom-input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    h2.question {
+        font-size: 2.5rem;
+    }
+
+    span.underline {
+        text-decoration: underline;
+    }
+
+    /* Add this CSS for the checked state */
+    .option.checked {
+        background-color: #222048;
+        /* Same background color as hover */
+        border-color: #76ABAE;
+        /* Same border color as hover */
+    }
+
+    /* Existing hover state */
+    .option:hover {
+        background-color: #222048;
+        /* Change background color on hover */
+        border-color: #76ABAE;
+        /* Change border color on hover */
+    }
 </style>
 
 <body>
@@ -329,232 +347,345 @@
     </div>
     <script>
         let currentQuestion = 0; // Start with the first question
-    const quizData = [
-        {
-            question: "Male or Female?",
-            options: [
-                { text: "Male", description: "" },
-                { text: "Female", description: "" },
-            ],
-            requiredOptions: 1,
-            type : "text", // Number of required options for this question
-            desc: {
-                title: "Tailed to Your Level of Experience",
-                text: "This will help you get a workout plan that is tailored to your experience level."
+        const quizData = [
+            {
+                question: "How old are you?",
+                type: "number", // Indicates it's a text input
+                placeholder: "Enter your age",
+                title: "Enter a valid age",
+                min: 1,
+                max: 120,
+                desc: {
+                    title: "Age Information",
+                    text: "This helps us tailor the workout plan to your age group."
+                }
+            },
+            {
+                question: "Male or Female?",
+                options: [
+                    { text: "Male", description: "" },
+                    { text: "Female", description: "" },
+                ],
+                requiredOptions: 1,
+                type: "option", // Number of required options for this question
+                desc: {
+                    title: "Tailed to Your Level of Experience",
+                    text: "This will help you get a workout plan that is tailored to your experience level."
+                }
+            },
+            {
+                question: "How long have you been working out?",
+                options: [
+                    { text: "Beginner", description: "Been working out for less than a year." },
+                    { text: "Intermediate", description: "Been working out for between a year and two." },
+                    { text: "Advanced", description: "Been working out more than two years." }
+                ],
+                requiredOptions: 1,
+                type: "option",
+                desc: {
+                    title: "Achieve Your Fitness Goals",
+                    text: "This will help you get a workout plan that is aligned with your fitness goals."
+                }
+            },
+            {
+                question: "What is your goal?",
+                options: [
+                    { text: "Aesthetic", description: "" },
+                    { text: "Power Lifter", description: "" },
+                    { text: "Weight Loss", description: "" }
+                ],
+                requiredOptions: 1,
+                type: "option",
+                desc: {
+                    title: "Achieve Your Fitness Goals",
+                    text: "This will help you get a workout plan that is aligned with your fitness goals."
+                }
+            },
+            {
+                question: "What are your primary target muscles?",
+                options: [
+                    { text: "Back", description: "" },
+                    { text: "Chest", description: "" },
+                    { text: "Arms", description: "" },
+                    { text: "Shoulders", description: "" },
+                    { text: "Legs", description: "" },
+                    { text: "Abs", description: "" }
+                ],
+                requiredOptions: 3,
+                type: "option",
+                desc: {
+                    title: "Achieve Your Fitness Goals",
+                    text: "This will help you get a workout plan that is aligned with your fitness goals."
+                }
+            },
+            {
+                question: "What do you prefer?",
+                options: [
+                    { text: "Strength Training", description: "" },
+                    { text: "Cardio", description: "" },
+                    { text: "Both", description: "" },
+                ],
+                requiredOptions: 1,
+                type: "option",
+                desc: {
+                    title: "Achieve Your Fitness Goals",
+                    text: "This will help you get a workout plan that is aligned with your fitness goals."
+                }
+            },
+            {
+                question: "How would you describe your physical build right now?",
+                options: [
+                    { text: "Skinny", description: "" },
+                    { text: "Obese", description: "" },
+                    { text: "Skinny Fat", description: "" },
+                    { text: "Little Muscular", description: "" },
+                    { text: "Muscular", description: "" }
+                ],
+                requiredOptions: 1,
+                type: "option",
+                desc: {
+                    title: "Achieve Your Fitness Goals",
+                    text: "This will help you get a workout plan that is aligned with your fitness goals."
+                }
+            },
+            {
+                question: "Which describes you the best?",
+                options: [
+                    { text: "Harder for you to loose weight than gain weight", description: "" },
+                    { text: "Harder for you to gain weight than to lose it.", description: "" }
+                ],
+                requiredOptions: 1,
+                type: "option",
+                desc: {
+                    title: "Achieve Your Fitness Goals",
+                    text: "This will help you get a workout plan that is aligned with your fitness goals."
+                }
+            },
+            {
+                question: "How many days can you realisticlly workout?",
+                options: [
+                    { text: "2 Days", description: "" },
+                    { text: "3-4 Days", description: "" },
+                    { text: "4-5 Days", description: "" },
+                    { text: "6 Days", description: "" }
+                ],
+                requiredOptions: 1,
+                type: "option",
+                desc: {
+                    title: "Achieve Your Fitness Goals",
+                    text: "This will help you get a workout plan that is aligned with your fitness goals."
+                }
+            },
+            {
+                question: "What is your dietary preference?",
+                options: [
+                    { text: "Vegetarian", description: "" },
+                    { text: "Non-Vegetarian", description: "" },
+                    { text: "Eggetarian", description: "" }
+                ],
+                requiredOptions: 1,
+                type: "option",
+                desc: {
+                    title: "Achieve Your Fitness Goals",
+                    text: "This will help you get a workout plan that is aligned with your fitness goals."
+                }
+            },
+            {
+                question: "How much is daily water intake?",
+                options: [
+                    { text: "Above 2L", description: "" },
+                    { text: "Below 2L", description: "" }
+                ],
+                requiredOptions: 1,
+                type: "option",
+                desc: {
+                    title: "Achieve Your Fitness Goals",
+                    text: "This will help you get a workout plan that is aligned with your fitness goals."
+                }
+            },
+            {
+                question: "How is your sleep cycle?",
+                options: [
+                    { text: "7-8 Hours or more.", description: "" },
+                    { text: "5-6 Hours.", description: "" },
+                    { text: "Less than 5 hours.", description: "" }
+                ],
+                requiredOptions: 1,
+                type: "option",
+                desc: {
+                    title: "Achieve Your Fitness Goals",
+                    text: "This will help you get a workout plan that is aligned with your fitness goals."
+                }
+            },
+            {
+                question: "What is your height?",
+                type: "number", // Indicates it's a text input
+                placeholder: "Enter your height",
+                title: "Enter your height",
+                min: 0,
+                max: 1000,
+                desc: {
+                    title: "Age Information",
+                    text: "This helps us tailor the workout plan to your age group."
+                }
+            },
+            {
+                question: "What is your weight?",
+                type: "number", // Indicates it's a text input
+                placeholder: "Enter your weight",
+                title: "Enter a valid weight",
+                min: 1,
+                max: 1000,
+                desc: {
+                    title: "Age Information",
+                    text: "This helps us tailor the workout plan to your age group."
+                }
+            },
+            {
+                question: "What is your target weight?",
+                type: "number", // Indicates it's a text input
+                placeholder: "Enter your target weight",
+                title: "Enter a valid target weight",
+                min: 1,
+                max: 1000,
+                desc: {
+                    title: "Age Information",
+                    text: "This helps us tailor the workout plan to your age group."
+                }
+            },
+            {
+                question: "What is your name?",
+                type: "text", // Indicates it's a text input
+                placeholder: "Enter your name",
+                title: "Enter a valid name",
+                desc: {
+                    title: "Age Information",
+                    text: "This helps us tailor the workout plan to your age group."
+                }
             }
-        },
-        {
-            question: "How long have you been working out?",
-            options: [
-                { text: "Beginner", description: "Been working out for less than a year." },
-                { text: "Intermediate", description: "Been working out for between a year and two." },
-                { text: "Advanced", description: "Been working out more than two years." }
-            ],
-            requiredOptions: 1,
-            type : "option",
-            desc: {
-                title: "Achieve Your Fitness Goals",
-                text: "This will help you get a workout plan that is aligned with your fitness goals."
-            }
-        },
-        {
-            question: "What is your goal?",
-            options: [
-                { text: "Aesthetic", description: "" },
-                { text: "Power Lifter", description: "" },
-                { text: "Weight Loss", description: "" }
-            ],
-            requiredOptions: 1,
-            type : "option",
-            desc: {
-                title: "Achieve Your Fitness Goals",
-                text: "This will help you get a workout plan that is aligned with your fitness goals."
-            }
-        },
-        {
-            question: "What are your primary target muscles?",
-            options: [
-                { text: "Back", description: "" },
-                { text: "Chest", description: "" },
-                { text: "Arms", description: "" },
-                { text: "Shoulders", description: "" },
-                { text: "Legs", description: "" },
-                { text: "Abs", description: "" }
-            ],
-            requiredOptions: 3,
-            type : "option",
-            desc: {
-                title: "Achieve Your Fitness Goals",
-                text: "This will help you get a workout plan that is aligned with your fitness goals."
-            }
-        },
-        {
-            question: "What do you prefer?",
-            options: [
-                { text: "Strength Training", description: "" },
-                { text: "Cardio", description: "" },
-                { text: "Both", description: "" },
-            ],
-            requiredOptions: 1,
-            type : "option",
-            desc: {
-                title: "Achieve Your Fitness Goals",
-                text: "This will help you get a workout plan that is aligned with your fitness goals."
-            }
-        },
-        {
-            question: "How would you describe your physical build right now?",
-            options: [
-                { text: "Skinny", description: "" },
-                { text: "Obese", description: "" },
-                { text: "Skinny Fat", description: "" },
-                { text: "Little Muscular", description: "" },
-                { text: "Muscular", description: "" }
-            ],
-            requiredOptions: 1,
-            type : "option",
-            desc: {
-                title: "Achieve Your Fitness Goals",
-                text: "This will help you get a workout plan that is aligned with your fitness goals."
-            }
-        },
-        {
-            question: "Which describes you the best?",
-            options: [
-                { text: "Harder for you to loose weight than gain weight", description: "" },
-                { text: "Harder for you to gain weight than to lose it.", description: "" }
-            ],
-            requiredOptions: 1,
-            type : "option",
-            desc: {
-                title: "Achieve Your Fitness Goals",
-                text: "This will help you get a workout plan that is aligned with your fitness goals."
-            }
-        },
-        {
-            question: "How many days can you realisticlly workout?",
-            options: [
-                { text: "2 Days", description: "" },
-                { text: "3-4 Days", description: "" },
-                { text: "4-5 Days", description: "" },
-                { text: "6 Days", description: "" }
-            ],
-            requiredOptions: 1,
-            type : "option",
-            desc: {
-                title: "Achieve Your Fitness Goals",
-                text: "This will help you get a workout plan that is aligned with your fitness goals."
-            }
-        },
-        {
-            question: "What is your dietary preference?",
-            options: [
-                { text: "Vegetarian", description: "" },
-                { text: "Non-Vegetarian", description: "" },
-                { text: "Eggetarian", description: "" }
-            ],
-            requiredOptions: 1,
-            type : "option",
-            desc: {
-                title: "Achieve Your Fitness Goals",
-                text: "This will help you get a workout plan that is aligned with your fitness goals."
-            }
-        },
-        {
-            question: "How much is daily water intake?",
-            options: [
-                { text: "Above 2L", description: "" },
-                { text: "Below 2L", description: "" }
-            ],
-            requiredOptions: 1,
-            type : "option",
-            desc: {
-                title: "Achieve Your Fitness Goals",
-                text: "This will help you get a workout plan that is aligned with your fitness goals."
-            }
-        },
-        {
-            question: "How is your sleep cycle?",
-            options: [
-                { text: "7-8 Hours or more.", description: "" },
-                { text: "5-6 Hours.", description: "" },
-                { text: "Less than 5 hours.", description: "" }
-            ],
-            requiredOptions: 1,
-            type : "option",
-            desc: {
-                title: "Achieve Your Fitness Goals",
-                text: "This will help you get a workout plan that is aligned with your fitness goals."
-            }
-        }
-        // Add more questions and options as needed
-    ];
-    const totalQuestions = quizData.length;
+            // Add more questions and options as needed
+        ];
+        const totalQuestions = quizData.length;
 
-    function updateQuestion() {
-        const questionElement = document.querySelector('.question');
-        const inputContainer = document.querySelector('.input-container');
-        const descElement = document.querySelector('.Desc');
-        const progressBar = document.querySelector('.load-bar');
-        const currentQuestionData = quizData[currentQuestion];
-    
-        questionElement.dataset.question = currentQuestion + 1; // Update question number
-        questionElement.querySelector('h2').textContent = currentQuestionData.question;
-    
-        // Clear existing content in the input container
-        inputContainer.innerHTML = '';
-    
-        if (currentQuestionData.type === 'text') {
-            // If it's a text type question, show the input element
-            inputContainer.innerHTML = `
-                <input type="number" id="textInput" class="custom-input" pattern="\d+" title="Enter your input" placeholder="Enter your input" min="0">
+        function updateQuestion() {
+            const questionElement = document.querySelector('.question');
+            const inputContainer = document.querySelector('.input-container');
+            const descElement = document.querySelector('.Desc');
+            const progressBar = document.querySelector('.load-bar');
+            const currentQuestionData = quizData[currentQuestion];
+
+            questionElement.dataset.question = currentQuestion + 1; // Update question number
+            questionElement.querySelector('h2').textContent = currentQuestionData.question;
+
+            // Clear existing content in the input container
+            inputContainer.innerHTML = '';
+
+            if (currentQuestionData.type === 'text' || currentQuestionData.type === 'number') {
+                // If it's a text type question, show the input element
+                inputContainer.innerHTML = `
+                <input 
+                id=ageInput
+                type="${currentQuestionData.type}" 
+                class="custom-input" 
+                placeholder="${currentQuestionData.placeholder}" 
+                title="${currentQuestionData.title}" 
+                min="${currentQuestionData.min}" 
+                max="${currentQuestionData.max}"
+            >
             `;
-        } else {
-            // If it's not a text type question, show the options
-            currentQuestionData.options.forEach((option, index) => {
-                const optionLabel = document.createElement('label');
-                optionLabel.htmlFor = `option${index + 1}`;
-                optionLabel.className = 'option';
-                optionLabel.innerHTML = `
-                    <div class="content">
-                        <h3>${option.text}</h3>
-                        <p class="op">${option.description}</p>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" id="option${index + 1}" class="custom-checkbox">
-                    </div>
-                `;
-                inputContainer.appendChild(optionLabel);
-            });
-        }
-    
-        // Update the description section
-        descElement.innerHTML = `
+            } else {
+                // If it's not a text type question, show the options
+                currentQuestionData.options.forEach((option, index) => {
+                    const optionLabel = document.createElement('label');
+                    optionLabel.htmlFor = `option${index + 1}`;
+                    optionLabel.className = 'option unchecked';
+                    optionLabel.innerHTML = `
+                        <div class="content">
+                            <h3>${option.text}</h3>
+                            <p class="op">${option.description}</p>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="option${index + 1}" class="custom-checkbox">
+                        </div>
+                    `;
+                    inputContainer.appendChild(optionLabel);
+                });
+
+                // Attach event listeners to checkboxes
+                document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', handleCheckboxChange);
+                });
+            }
+
+            // Update the description section
+            descElement.innerHTML = `
             <h4>${currentQuestionData.desc.title}</h4>
             <p class="desc">${currentQuestionData.desc.text}</p>
-        `;
-    
-        // Update the progress bar
-        const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
-        progressBar.style.width = progressPercentage + '%';
-    }
-    
-    
+            `;
+
+            // Update the progress bar
+            const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
+            progressBar.style.width = progressPercentage + '%';
+        }
+
+
+
 
         // Function to handle clicking the "Next" button
         // Function to handle clicking the "Next" button
         // Function to handle clicking the "Next" button
         function nextQuestion() {
-            const selectedOptions = document.querySelectorAll('.custom-checkbox:checked');
-            const requiredOptions = quizData[currentQuestion].requiredOptions;
-        
-            if (selectedOptions.length <= requiredOptions && selectedOptions.length != 0) {
-                const selectedOptionTexts = Array.from(selectedOptions).map(option => option.parentElement.parentElement.querySelector('.content h3').textContent);
+            const currentQuestionData = quizData[currentQuestion];
+
+            if (currentQuestionData.type === "option") {
+                const selectedOptions = document.querySelectorAll('.custom-checkbox:checked');
+                const requiredOptions = currentQuestionData.requiredOptions;
+
+                if (selectedOptions.length <= requiredOptions && selectedOptions.length !== 0) {
+                    const selectedOptionTexts = Array.from(selectedOptions).map(option => option.parentElement.parentElement.querySelector('.content h3').textContent);
+                    const response = {
+                        question: currentQuestionData.question,
+                        answers: selectedOptionTexts
+                    };
+
+                    // Send the response to Flask using an HTTP POST request
+                    fetch('/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(response)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to submit response');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data); // Log the response from the server
+                            currentQuestion++;
+                            if (currentQuestion < totalQuestions) {
+                                updateQuestion();
+                            } else if (currentQuestion == totalQuestions) {
+                                // Redirect to the responses page when all questions are answered
+                                window.location.href = '/responses';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Failed to submit response. Please try again.');
+                        });
+                } else {
+                    alert(`You can select at most ${requiredOptions} option/options.`);
+                }
+            } else {
+                const textInput = document.getElementById('ageInput'); // Using getElementById for text input
                 const response = {
-                    question: quizData[currentQuestion].question,
-                    answers: selectedOptionTexts
+                    question: currentQuestionData.question,
+                    answers: textInput.value
                 };
-        
+
                 // Send the response to Flask using an HTTP POST request
                 fetch('/submit', {
                     method: 'POST',
@@ -583,25 +714,25 @@
                         console.error('Error:', error);
                         alert('Failed to submit response. Please try again.');
                     });
-            } else {
-                alert(`You can select at most ${requiredOptions} option/options.`);
             }
         }
-        
+
+
+
 
 
 
         // Function to handle clicking the "Back" button
         // Function to handle clicking the "Back" button
-function previousQuestion() {
-    if (currentQuestion > 0) {
-        currentQuestion--; // Move to the previous question
-        updateQuestion(); // Update the displayed question
-    } else {
-        // Redirect to the '/' route
-        window.location.href = '/';
-    }
-}
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--; // Move to the previous question
+                updateQuestion(); // Update the displayed question
+            } else {
+                // Redirect to the '/' route
+                window.location.href = '/';
+            }
+        }
 
 
         // Event listener for checkbox changes
