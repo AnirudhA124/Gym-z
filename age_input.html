@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="./style.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Gym-z</title>
+    <link rel="icon" href="/static/images.png" type="image/png">
+</head>
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0px;
+        padding: 0px;
+        background-color: #0D0B0D;
+    }
+
+    div.title {
+        height: 10vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    div.logo {
+        width: 50px;
+        /* Adjust according to your design */
+        height: 50px;
+        /* Adjust according to your design */
+        /* Add a background image */
+        background-image: url(/static/images.png);
+        /* Specify how the background image should be displayed */
+        background-size: cover;
+        margin-left: 10px;
+    }
+
+    div.name {
+        align-self: center;
+        margin-left: 10px;
+    }
+
+    a.title {
+        color: white;
+        font-family: Outfit, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+        text-decoration: none;
+        font-size: medium;
+        font-weight: bold;
+    }
+
+    div.quiz {
+        display: flex;
+        flex-direction: column;
+        width: 50vw;
+        padding: 5vh;
+    }
+
+    /* Add this CSS to style the loading bar */
+    .load-bar {
+        height: 3px;
+        /* Adjust the thickness of the loading bar */
+        /* background: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2)); */
+        background-color: #76ABAE;
+        /* Gradient with light ends and dark middle */
+    }
+
+    div.question {
+        text-align: center;
+        margin-top: 20px;
+        width: 100%;
+        color: white;
+    }
+
+    h2 {
+        font-family: Outfit, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+        margin-bottom: 20px;
+    }
+
+    .option {
+        display: flex;
+        width: 90%;
+        color: white;
+        justify-content: space-between;
+        padding: 5px;
+        border-radius: 15px;
+        border-color: rgba(30, 30, 30, 1);
+        border-width: 4px;
+        /* Adjust the border width as needed */
+        border-style: solid;
+        /* Add border style */
+        padding-left: 15px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        align-items: center;
+        background-color: transparent;
+        /* Set initial background color */
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+        /* Smooth transition for background color and border color change */
+    }
+
+    .option:hover{
+        background-color: #222048;
+        /* Change background color on hover */
+        border-color: #76ABAE;
+        /* Change border color on hover */
+    }
+
+    div.Desc {
+        padding: 10px;
+        width: 90%;
+        color: white;
+        border-radius: 15px;
+        border-color: rgba(30, 30, 30, 1);
+        border-width: 4px;
+        /* Adjust the border width as needed */
+        border-style: solid;
+        /* Add border style */
+        margin-bottom: 30px;
+        background-color: rgba(30, 30, 30, 1);
+    }
+
+    p.op {
+        width: 100%;
+        color: #969696;
+    }
+
+    p.desc {
+        color: #969696;
+        width: 80%;
+    }
+
+    a.term {
+        color: #969696;
+    }
+
+    p.terms {
+        color: #969696;
+    }
+
+    label {
+        width: 100%;
+    }
+
+    input {
+        margin-right: 5px;
+    }
+
+    /* Style for the custom checkbox */
+    .custom-checkbox {
+        appearance: none;
+        /* Remove default appearance */
+        -webkit-appearance: none;
+        /* Remove default appearance for WebKit browsers */
+        -moz-appearance: none;
+        /* Remove default appearance for Mozilla browsers */
+        width: 20px;
+        /* Set width of checkbox */
+        height: 20px;
+        /* Set height of checkbox */
+        border: 2px solid #4A4A4A;
+        /* Set border color */
+        border-radius: 4px;
+        /* Optional: Add border radius for rounded corners */
+        background-color: transparent;
+        /* Set background color to transparent */
+        cursor: pointer;
+        /* Change cursor to pointer on hover */
+    }
+
+    /* Style for the custom checkbox when checked */
+    .custom-checkbox:checked {
+        background-image: url(/static/imageedit_4_3329779529-removebg-preview.png);
+        background-color: #76ABAE;
+        /* Change background color when checked */
+        background-size: cover;
+    }
+
+    .custom-checkbox:checked::after {
+        /* Display the tick mark */
+        content: "";
+        /* Unicode character for a tick mark */
+        font-size: 16px;
+        /* Size of the tick mark */
+        /* transform: translate(-50%, -50%); Center the tick mark */
+    }
+
+    .custom-checkbox-terms {
+        margin-top: 5px;
+        appearance: none;
+        /* Remove default appearance */
+        -webkit-appearance: none;
+        /* Remove default appearance for WebKit browsers */
+        -moz-appearance: none;
+        /* Remove default appearance for Mozilla browsers */
+        width: 20px;
+        /* Set width of checkbox */
+        height: 20px;
+        /* Set height of checkbox */
+        border: 2px solid #4A4A4A;
+        /* Set border color */
+        border-radius: 4px;
+        /* Optional: Add border radius for rounded corners */
+        background-color: transparent;
+        /* Set background color to transparent */
+        cursor: pointer;
+        /* Change cursor to pointer on hover */
+    }
+
+    /* Style for the custom checkbox when checked */
+    .custom-checkbox-terms:checked {
+        background-image: url(/static/imageedit_4_3329779529-removebg-preview.png);
+        background-color: rgba(30, 30, 30, 1);
+        /* Change background color when checked */
+        background-size: cover;
+    }
+
+    .custom-checkbox-terms:checked::after {
+        /* Display the tick mark */
+        content: "";
+        /* Unicode character for a tick mark */
+        font-size: 16px;
+        /* Size of the tick mark */
+        /* transform: translate(-50%, -50%); Center the tick mark */
+    }
+
+    div.terms-conditions {
+        display: flex;
+    }
+
+    button.next {
+        height: 50px;
+        width: 230px;
+        border-radius: 25px;
+        align-self: center;
+        margin-top: 10px;
+        background-color: #76ABAE;
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+        border-style: none;
+    }
+
+    img.back-button {
+        margin-top: 10px;
+        height: 32px;
+        width: 32px;
+        cursor: pointer;
+    }
+
+    /* Add these styles to your existing CSS */
+    .checked {
+        background-color: #222048;
+        border-color: #76ABAE;
+    }
+
+    .unchecked {
+        background-color: transparent;
+        border-color: rgba(30, 30, 30, 1);
+    }
+    img.cake{
+        margin-top: 20px;
+        align-self: center;
+        width: 25%;
+        height: 25%;
+    }
+    .custom-input {
+        margin-top: 20px;
+        margin-bottom: 50px;
+        align-self: center;
+        width: 300px;
+        font-size: 2.5rem;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        border-color: transparent;
+        color: #808080;
+        text-align: center;
+    }
+    .custom-input::-webkit-inner-spin-button,
+.custom-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+  h2.question{
+    font-size: 2.5rem;
+  }
+  span.underline{
+    text-decoration: underline;
+  }
+  button.next.disabled {
+    background-color: #CCCCCC; /* Light gray */
+    cursor: not-allowed;
+}
+
+    
+</style>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <div class="title">
+        <div class="logo">
+
+        </div>
+        <div class="name">
+            <a class="title" href="#">Gym-Z</a>
+        </div>
+    </div>
+    <div class="quiz">
+        <div class="load-bar">
+        </div>
+        <img src="/static/ChevronLeft.webp" alt="" class="back-button">
+        <img src="/static/cake.webp" alt="" class="cake">
+        <div class="question">
+            <h2 class="question">What's your age?</h2>
+        </div>
+        <input type="number" id="ageInput" class="custom-input" pattern="\d+" title="Enter your age" placeholder="Enter your age" min="0">
+        <div class="Desc">
+            <h4>Age Specific Workouts</h4>
+            <p class="desc">Our AI will take your age into account when creating a workout plan tailored to you.<br>
+                <span class="underline">Must be 18 or older to use Coachify AI</span>
+            </p>
+        </div>
+        <div class="terms-conditions">
+            <div class="check_box">
+                <input type="checkbox" id="terms-checkbox" class="custom-checkbox-terms">
+            </div>
+            <div class="terms_condi_text">
+                <p class="terms">By continuing, I agree with <a class="term" href="#">Terms of Use</a>, <a
+                        class="term" href="#">Privacy Policy</a> and our <a class="term" href="#">Refund Policy</a>
+                </p>
+            </div>
+        </div>
+        <button id="nextButton" class="next" disabled>Next</button>
+    </div>
+<script>
+    document.getElementById('ageInput').addEventListener('wheel', function(event) {
+        if (event.deltaY > 0) {
+            this.stepDown(); // Decrease value on scrolling down
+        } else {
+            this.stepUp(); // Increase value on scrolling up
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        var ageInput = document.getElementById('ageInput');
+        var termsCheckbox = document.getElementById('terms-checkbox');
+        var nextButton = document.getElementById('nextButton');
+        
+        // Disable the Next button initially
+        nextButton.setAttribute('disabled', 'true');
+        nextButton.classList.add('disabled');
+    
+        // Check when the age input or terms checkbox changes
+        function checkInputs() {
+            // Check if the age is 18 or greater and the terms checkbox is checked
+            if (ageInput.value !== '' && parseInt(ageInput.value) >= 18 && termsCheckbox.checked) {
+                nextButton.removeAttribute('disabled');
+                nextButton.classList.remove('disabled');
+            } else {
+                nextButton.setAttribute('disabled', 'true');
+                nextButton.classList.add('disabled');
+            }
+        }
+    
+        ageInput.addEventListener('input', checkInputs);
+        termsCheckbox.addEventListener('change', checkInputs);
+        
+        // Add event listener to the Next button
+        document.getElementById('nextButton').addEventListener('click', function() {
+            var ageInput = document.getElementById('ageInput');
+            var termsCheckbox = document.getElementById('terms-checkbox');
+        
+            // Check if the age is 18 or greater and the terms checkbox is checked
+            if (ageInput.value !== '' && parseInt(ageInput.value) >= 18 && termsCheckbox.checked) {
+                const response = {
+                    question: "What's you age?" ,
+                    answers: ageInput.value
+                };
+        
+                // Send the response to Flask using an HTTP POST request
+                fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(response)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to submit response');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data); // Log the response from the server
+                        // Redirect to the responses page when all questions are answered
+                        window.location.href = ('/questions');
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to submit response. Please try again.');
+                    });
+            } else {
+                alert('Please enter a valid age and agree to the terms to proceed.');
+            }
+        });
+        
+    });
+</script>
+</body>
+</html>
