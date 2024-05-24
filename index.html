@@ -267,9 +267,11 @@
         width: 25%;
         height: 25%;
     }
-    div.input-container{
+
+    div.input-container {
         width: 100%;
     }
+
     .custom-input {
         margin-top: 20px;
         margin-bottom: 50px;
@@ -342,6 +344,16 @@
             <h4>Tailed to Your Level of Experience</h4>
             <p class="desc">This will help you get a workout plan that is tailored to your experience level.
             </p>
+        </div>
+        <div class="terms-conditions">
+            <div class="check_box">
+                <input type="checkbox" id="terms-checkbox" class="custom-checkbox-terms">
+            </div>
+            <div class="terms_condi_text">
+                <p class="terms">By continuing, I agree with <a class="term" href="#">Terms of Use</a>, <a class="term"
+                        href="#">Privacy Policy</a> and our <a class="term" href="#">Refund Policy</a>
+                </p>
+            </div>
         </div>
         <button class="next">Next</button>
     </div>
@@ -571,6 +583,7 @@
             const questionElement = document.querySelector('.question');
             const inputContainer = document.querySelector('.input-container');
             const descElement = document.querySelector('.Desc');
+            const termsConditions = document.querySelector('.terms-conditions'); // Select the terms and conditions div
             const progressBar = document.querySelector('.load-bar');
             const currentQuestionData = quizData[currentQuestion];
 
@@ -626,7 +639,15 @@
             // Update the progress bar
             const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
             progressBar.style.width = progressPercentage + '%';
+
+            // Show or hide the terms and conditions div based on the current question number
+            if (currentQuestion === 0) {
+                termsConditions.style.display = 'flex';
+            } else {
+                termsConditions.style.display = 'none';
+            }
         }
+
 
 
 
@@ -636,6 +657,13 @@
         // Function to handle clicking the "Next" button
         function nextQuestion() {
             const currentQuestionData = quizData[currentQuestion];
+
+            // Check if the terms and conditions checkbox is checked
+            const termsCheckbox = document.getElementById('terms-checkbox');
+            if (!termsCheckbox.checked) {
+                alert('Please agree to the terms and conditions before proceeding.');
+                return; // Prevent further execution of the function
+            }
 
             if (currentQuestionData.type === "option") {
                 const selectedOptions = document.querySelectorAll('.custom-checkbox:checked');
