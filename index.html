@@ -373,7 +373,8 @@
         color: #808080;
         font-size: 2rem;
     }
-    #unitLabel{
+
+    #unitLabelWeight {
         color: #808080;
         font-size: 2rem;
     }
@@ -423,47 +424,6 @@
     <script>
         let currentQuestion = 0; // Start with the first question
         const quizData = [
-        {
-                question: "What is your height?",
-                type: "number", // Indicates it's a text input
-                placeholder: "Enter your height",
-                title: "Enter your height",
-                unit: "yes",
-                unit_type:"height",
-                min: 0,
-                max: 1000,
-                desc: {
-                    title: "Age Information",
-                    text: "This helps us tailor the workout plan to your age group."
-                }
-            },
-            {
-                question: "What is your weight?",
-                type: "number", // Indicates it's a text input
-                placeholder: "Enter your weight",
-                title: "Enter a valid weight",
-                unit: "yes",
-                unit_type:"weight",
-                min: 1,
-                max: 1000,
-                desc: {
-                    title: "Age Information",
-                    text: "This helps us tailor the workout plan to your age group."
-                }
-            },
-            {
-                question: "What is your target weight?",
-                type: "number", // Indicates it's a text input
-                placeholder: "Enter your target weight",
-                title: "Enter a valid target weight",
-                unit: "no",
-                min: 1,
-                max: 1000,
-                desc: {
-                    title: "Age Information",
-                    text: "This helps us tailor the workout plan to your age group."
-                }
-            },
             {
                 question: "How old are you?",
                 type: "number", // Indicates it's a text input
@@ -634,7 +594,48 @@
                     text: "This will help you get a workout plan that is aligned with your fitness goals."
                 }
             },
-            
+            {
+                question: "What is your height?",
+                type: "number", // Indicates it's a text input
+                placeholder: "Enter your height",
+                title: "Enter your height",
+                unit: "yes",
+                unit_type: "height",
+                min: 0,
+                max: 1000,
+                desc: {
+                    title: "Age Information",
+                    text: "This helps us tailor the workout plan to your age group."
+                }
+            },
+            {
+                question: "What is your weight?",
+                type: "number", // Indicates it's a text input
+                placeholder: "Enter your weight",
+                title: "Enter a valid weight",
+                unit: "yes",
+                unit_type: "weight",
+                min: 1,
+                max: 1000,
+                desc: {
+                    title: "Age Information",
+                    text: "This helps us tailor the workout plan to your age group."
+                }
+            },
+            {
+                question: "What is your target weight?",
+                type: "number", // Indicates it's a text input
+                placeholder: "Enter your target weight",
+                title: "Enter a valid target weight",
+                unit: "yes",
+                unit_type: "weight",
+                min: 1,
+                max: 1000,
+                desc: {
+                    title: "Age Information",
+                    text: "This helps us tailor the workout plan to your age group."
+                }
+            },
             {
                 question: "What is your name?",
                 type: "text", // Indicates it's a text input
@@ -650,327 +651,287 @@
         ];
         const totalQuestions = quizData.length;
 
-        function updateQuestion() {
-    const questionElement = document.querySelector('.question');
-    const inputContainer = document.querySelector('.input-container');
-    const descElement = document.querySelector('.Desc');
-    const termsConditions = document.querySelector('.terms-conditions'); // Select the terms and conditions div
-    const progressBar = document.querySelector('.load-bar');
-    const currentQuestionData = quizData[currentQuestion];
+        function initializeUnitSelection(unitType) {
+            // Attempt to retrieve the necessary elements from the DOM
+            const inputElement = document.getElementById(`${unitType}Input`);
+            const unitLabelElement = document.getElementById(`unitLabel${unitType.charAt(0).toUpperCase() + unitType.slice(1)}`);
+            const leftUnitElement = document.getElementById('left');
+            const rightUnitElement = document.getElementById('right');
+            const selectedUnitInputElement = document.getElementById(`selectedUnit${unitType.charAt(0).toUpperCase() + unitType.slice(1)}`);
 
-    questionElement.dataset.question = currentQuestion + 1; // Update question number
-    questionElement.querySelector('h2').textContent = currentQuestionData.question;
+            // Check if any of the required elements are null
+            if (!inputElement || !unitLabelElement || !leftUnitElement || !rightUnitElement || !selectedUnitInputElement) {
+                console.error(`One or more elements for ${unitType} selection are missing from the DOM.`);
+                return; // Exit the function if any element is missing
+            }
 
-    // Clear existing content in the input container
-    inputContainer.innerHTML = '';
-
-    if ((currentQuestionData.type === 'text' || currentQuestionData.type === 'number') && currentQuestionData.unit == 'no') {
-        // If it's a text type question, show the input element
-        inputContainer.innerHTML = `
-            <input 
-                id="ageInput"
-                type="${currentQuestionData.type}" 
-                class="custom-input" 
-                placeholder="${currentQuestionData.placeholder}" 
-                title="${currentQuestionData.title}" 
-                min="${currentQuestionData.min}" 
-                max="${currentQuestionData.max}"
-            >
-        `;
-    } else if (currentQuestionData.unit == 'yes'&&currentQuestionData.unit_type == 'height') {
-        // If it's a number input with unit selection
-        inputContainer.innerHTML = `<div class="units">
-            <div id="left" class="left">
-                <p class="unit-left">Centimeter</p>
-            </div>
-            <div id="right" class="right">
-                <p class="unit-right">Inches</p>
-            </div>
-        </div>
-        <div class="number_input">
-            <input type="number" id="heightInput" class="custom-input" title="Height" placeholder="Enter your Height" min="0">
-            <span id="unitLabelHeight">cm</span>
-            <input type="hidden" id="selectedUnit" value="cm">
-        </div>`;
-        
-        const unitScript = document.createElement('script');
-        unitScript.textContent = `
-            const heightInput = document.getElementById('heightInput');
-            const unitLabelHeight = document.getElementById('unitLabelHeight');
-            const leftUnit = document.getElementById('left');
-            const rightUnit = document.getElementById('right');
-            const selectedUnitInput = document.getElementById('selectedUnit');
-
-            let selectedUnit = 'cm'; // Default unit
-            leftUnit.classList.add('selected'); // Initially select 'cm'
-
-            // Function to update the unit label
-            const updateUnitLabelHeight = () => {
-                unitLabelHeight.textContent = selectedUnit;
-                selectedUnitInput.value = selectedUnit; // Update hidden input with selected unit
-            };
-
-            // Event listeners for unit selection
-            leftUnit.addEventListener('click', () => {
-                selectedUnit = 'cm';
-                updateUnitLabelHeight();
-                leftUnit.classList.add('selected');
-                rightUnit.classList.remove('selected');
-            });
-
-            rightUnit.addEventListener('click', () => {
-                selectedUnit = 'inch';
-                updateUnitLabelHeight();
-                rightUnit.classList.add('selected');
-                leftUnit.classList.remove('selected');
-            });
-
-            // Function to dynamically adjust the width of the input field
-            const adjustInputWidth = () => {
-                const valueLength = heightInput.value.length;
-                heightInput.style.width = valueLength > 0 ? \`\${valueLength + 1}ch\` : 'auto';
-            };
-
-            // Event listener for input value changes
-            heightInput.addEventListener('input', adjustInputWidth);
-
-            // Initialize unit label on page load
-            updateUnitLabelHeight();
-        `;
-        document.body.appendChild(unitScript);
-    }else if (currentQuestionData.unit == 'yes'&&currentQuestionData.unit_type == 'weight') {
-        // If it's a number input with unit selection
-        inputContainer.innerHTML = `<div class="units">
-            <div id="left" class="left">
-                <p class="unit-left">Kilogram</p>
-            </div>
-            <div id="right" class="right">
-                <p class="unit-right">Pound</p>
-            </div>
-        </div>
-        <div class="number_input">
-            <input type="number" id="weightInput" class="custom-input" title="Weight" placeholder="Enter your Weight" min="0">
-            <span id="unitLabel">Kg</span>
-            <input type="hidden" id="selectedUnit" value="Kg">
-        </div>`;
-        
-        const unitScript = document.createElement('script');
-        unitScript.textContent = `
-            const weightInput = document.getElementById('weightInput');
-            const unitLabel = document.getElementById('unitLabel');
-            const leftUnit = document.getElementById('left');
-            const rightUnit = document.getElementById('right');
-            const selectedUnitInput = document.getElementById('selectedUnit');
-
-            let selectedUnit = 'Kg'; // Default unit
-            leftUnit.classList.add('selected'); // Initially select 'Kg'
+            let selectedUnit = unitType === 'height' ? 'cm' : 'Kg'; // Default unit
+            leftUnitElement.classList.add('selected'); // Initially select 'cm' or 'Kg'
 
             // Function to update the unit label
             const updateUnitLabel = () => {
-                unitLabel.textContent = selectedUnit;
-                selectedUnitInput.value = selectedUnit; // Update hidden input with selected unit
+                if (unitLabelElement) {
+                    unitLabelElement.textContent = selectedUnit;
+                }
+                if (selectedUnitInputElement) {
+                    selectedUnitInputElement.value = selectedUnit; // Update hidden input with selected unit
+                }
+            };
+
+            // Function to handle unit selection events
+            const handleUnitSelection = (unit) => {
+                selectedUnit = unit;
+                updateUnitLabel();
+                leftUnitElement.classList.toggle('selected', unit === 'cm' || unit === 'Kg');
+                rightUnitElement.classList.toggle('selected', unit === 'inch' || unit === 'lb');
             };
 
             // Event listeners for unit selection
-            leftUnit.addEventListener('click', () => {
-                selectedUnit = 'Kg';
-                updateUnitLabel();
-                leftUnit.classList.add('selected');
-                rightUnit.classList.remove('selected');
-            });
-
-            rightUnit.addEventListener('click', () => {
-                selectedUnit = 'lb';
-                updateUnitLabel();
-                rightUnit.classList.add('selected');
-                leftUnit.classList.remove('selected');
-            });
+            if (leftUnitElement) {
+                leftUnitElement.addEventListener('click', () => handleUnitSelection(unitType === 'height' ? 'cm' : 'Kg'));
+            }
+            if (rightUnitElement) {
+                rightUnitElement.addEventListener('click', () => handleUnitSelection(unitType === 'height' ? 'inch' : 'lb'));
+            }
 
             // Function to dynamically adjust the width of the input field
             const adjustInputWidth = () => {
-                const valueLength = weightInput.value.length;
-                weightInput.style.width = valueLength > 0 ? \`\${valueLength + 1}ch\` : 'auto';
+                if (inputElement) {
+                    const valueLength = inputElement.value.length;
+                    inputElement.style.width = valueLength > 0 ? `${valueLength + 1}ch` : 'auto';
+                }
             };
 
             // Event listener for input value changes
-            weightInput.addEventListener('input', adjustInputWidth);
+            if (inputElement) {
+                inputElement.addEventListener('input', adjustInputWidth);
+            }
 
             // Initialize unit label on page load
             updateUnitLabel();
-        `;
-        document.body.appendChild(unitScript);
-    } 
-    else {
-        // If it's not a text type question, show the options
-        currentQuestionData.options.forEach((option, index) => {
-            const optionLabel = document.createElement('label');
-            optionLabel.htmlFor = `option${index + 1}`;
-            optionLabel.className = 'option unchecked';
-            optionLabel.innerHTML = `
-                <div class="content">
-                    <h3>${option.text}</h3>
-                    <p class="op">${option.description}</p>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" id="option${index + 1}" class="custom-checkbox">
-                </div>
+        }
+
+        function updateQuestion() {
+            const questionElement = document.querySelector('.question');
+            const inputContainer = document.querySelector('.input-container');
+            const descElement = document.querySelector('.Desc');
+            const termsConditions = document.querySelector('.terms-conditions'); // Select the terms and conditions div
+            const progressBar = document.querySelector('.load-bar');
+            const currentQuestionData = quizData[currentQuestion];
+
+            questionElement.dataset.question = currentQuestion + 1; // Update question number
+            questionElement.querySelector('h2').textContent = currentQuestionData.question;
+
+            // Clear existing content in the input container
+            inputContainer.innerHTML = '';
+
+            if ((currentQuestionData.type === 'text' || currentQuestionData.type === 'number') && currentQuestionData.unit == 'no') {
+                // If it's a text type question, show the input element
+                inputContainer.innerHTML = `
+                <input 
+                    id="ageInput"
+                    type="${currentQuestionData.type}" 
+                    class="custom-input" 
+                    placeholder="${currentQuestionData.placeholder}" 
+                    title="${currentQuestionData.title}" 
+                    min="${currentQuestionData.min}" 
+                    max="${currentQuestionData.max}"
+                >
             `;
-            inputContainer.appendChild(optionLabel);
-        });
-
-        // Attach event listeners to checkboxes
-        document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', handleCheckboxChange);
-        });
-    }
-
-    // Update the description section
-    descElement.innerHTML = `
-        <h4>${currentQuestionData.desc.title}</h4>
-        <p class="desc">${currentQuestionData.desc.text}</p>
-    `;
-
-    // Update the progress bar
-    const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
-    progressBar.style.width = progressPercentage + '%';
-
-    // Show or hide the terms and conditions div based on the current question number
-    if (currentQuestion === 0) {
-        termsConditions.style.display = 'flex';
-    } else {
-        termsConditions.style.display = 'none';
-    }
-}
-
-// Function to handle clicking the "Next" button
-function nextQuestion() {
-    const currentQuestionData = quizData[currentQuestion];
-
-    // Check if the terms and conditions checkbox is checked
-    const termsCheckbox = document.getElementById('terms-checkbox');
-    if (!termsCheckbox.checked) {
-        alert('Please agree to the terms and conditions before proceeding.');
-        return; // Prevent further execution of the function
-    }
-
-    if (currentQuestionData.type === "option") {
-        const selectedOptions = document.querySelectorAll('.custom-checkbox:checked');
-        const requiredOptions = currentQuestionData.requiredOptions;
-
-        if (selectedOptions.length <= requiredOptions && selectedOptions.length !== 0) {
-            const selectedOptionTexts = Array.from(selectedOptions).map(option => option.parentElement.parentElement.querySelector('.content h3').textContent);
-            const response = {
-                question: currentQuestionData.question,
-                answers: selectedOptionTexts
-            };
-
-            // Send the response to Flask using an HTTP POST request
-            fetch('/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(response)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to submit response');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log(data); // Log the response from the server
-                currentQuestion++;
-                if (currentQuestion < totalQuestions) {
-                    updateQuestion();
-                } else if (currentQuestion == totalQuestions) {
-                    // Redirect to the responses page when all questions are answered
-                    window.location.href = '/responses';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to submit response. Please try again.');
-            });
-        } else {
-            alert(`You can select at most ${requiredOptions} option/options.`);
-        }
-    } else {
-        if (currentQuestionData.unit === 'yes' && currentQuestionData.unit_type === 'height') {
-            const textInput = document.getElementById('heightInput');
-            answer = textInput.value;
-            const selectedUnit = document.getElementById('selectedUnit').value;
-            answer += ` ${selectedUnit}`; // Append the unit to the answer
-        } else if (currentQuestionData.unit === 'yes' && currentQuestionData.unit_type === 'weight') {
-            const textInput = document.getElementById('weightInput');
-            answer = textInput.value;
-            const selectedUnit = document.getElementById('selectedUnit').value;
-            answer += ` ${selectedUnit}`; // Append the unit to the answer
-        } else {
-            // Other text type questions
-            const textInput = document.getElementById('ageInput');
-            answer = textInput.value;
-        }
-
-        // Using getElementById for text input
-        const response = {
-            question: currentQuestionData.question,
-            answers: answer
-        };
-
-        if (currentQuestionData.unit === 'yes') {
-            const selectedUnit = document.getElementById('selectedUnit').value;
-            response.unit = selectedUnit;
-        }
-
-        // Send the response to Flask using an HTTP POST request
-        fetch('/submit', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(response)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to submit response');
+            } else if (currentQuestionData.unit == 'yes' && currentQuestionData.unit_type == 'height') {
+                // If it's a number input with unit selection
+                inputContainer.innerHTML = `<div class="units">
+                <div id="left" class="left">
+                    <p class="unit-left">Centimeter</p>
+                </div>
+                <div id="right" class="right">
+                    <p class="unit-right">Inches</p>
+                </div>
+            </div>
+            <div class="number_input">
+                <input type="number" id="heightInput" class="custom-input" title="Height" placeholder="${currentQuestionData.placeholder}" min="0">
+                <span id="unitLabelHeight">cm</span>
+                <input type="hidden" id="selectedUnitHeight" value="cm">
+            </div>`;
+                initializeUnitSelection(currentQuestionData.unit_type);
+            } else if (currentQuestionData.unit == 'yes' && currentQuestionData.unit_type == 'weight') {
+                // If it's a number input with unit selection
+                inputContainer.innerHTML = `<div class="units">
+                <div id="left" class="left">
+                    <p class="unit-left">Kilogram</p>
+                </div>
+                <div id="right" class="right">
+                    <p class="unit-right">Pound</p>
+                </div>
+            </div>
+            <div class="number_input">
+                <input type="number" id="weightInput" class="custom-input" title="Weight" placeholder="${currentQuestionData.placeholder}" min="0">
+                <span id="unitLabelWeight">Kg</span>
+                <input type="hidden" id="selectedUnitWeight" value="Kg">
+            </div>`;
+                initializeUnitSelection(currentQuestionData.unit_type);
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data); // Log the response from the server
-            currentQuestion++;
-            if (currentQuestion < totalQuestions) {
-                updateQuestion();
-            } else if (currentQuestion == totalQuestions) {
-                // Redirect to the responses page when all questions are answered
-                window.location.href = '/responses';
+            else {
+                // If it's not a text type question, show the options
+                currentQuestionData.options.forEach((option, index) => {
+                    const optionLabel = document.createElement('label');
+                    optionLabel.htmlFor = `option${index + 1}`;
+                    optionLabel.className = 'option unchecked';
+                    optionLabel.innerHTML = `
+                    <div class="content">
+                        <h3>${option.text}</h3>
+                        <p class="op">${option.description}</p>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="option${index + 1}" class="custom-checkbox">
+                    </div>
+                `;
+                    inputContainer.appendChild(optionLabel);
+                });
+
+                // Attach event listeners to checkboxes
+                document.querySelectorAll('.custom-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', handleCheckboxChange);
+                });
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Failed to submit response. Please try again.');
-        });
-    }
-}
 
+            // Update the description section
+            descElement.innerHTML = `
+            <h4>${currentQuestionData.desc.title}</h4>
+            <p class="desc">${currentQuestionData.desc.text}</p>
+        `;
 
+            // Update the progress bar
+            const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
+            progressBar.style.width = progressPercentage + '%';
 
+            // Show or hide the terms and conditions div based on the current question number
+            if (currentQuestion === 0) {
+                termsConditions.style.display = 'flex';
+            } else {
+                termsConditions.style.display = 'none';
+            }
+        }
 
+        // Function to handle clicking the "Next" button
+        function nextQuestion() {
+            const currentQuestionData = quizData[currentQuestion];
 
+            // Check if the terms and conditions checkbox is checked
+            const termsCheckbox = document.getElementById('terms-checkbox');
+            if (!termsCheckbox.checked) {
+                alert('Please agree to the terms and conditions before proceeding.');
+                return; // Prevent further execution of the function
+            }
 
-        // Function to handle clicking the "Back" button
+            if (currentQuestionData.type === "option") {
+                const selectedOptions = document.querySelectorAll('.custom-checkbox:checked');
+                const requiredOptions = currentQuestionData.requiredOptions;
+
+                if (selectedOptions.length <= requiredOptions && selectedOptions.length !== 0) {
+                    const selectedOptionTexts = Array.from(selectedOptions).map(option => option.parentElement.parentElement.querySelector('.content h3').textContent);
+                    const response = {
+                        question: currentQuestionData.question,
+                        answers: selectedOptionTexts
+                    };
+
+                    // Send the response to Flask using an HTTP POST request
+                    fetch('/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(response)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to submit response');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data); // Log the response from the server
+                            currentQuestion++;
+                            if (currentQuestion < totalQuestions) {
+                                updateQuestion();
+                            } else if (currentQuestion == totalQuestions) {
+                                // Redirect to the responses page when all questions are answered
+                                window.location.href = '/responses';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Failed to submit response. Please try again.');
+                        });
+                } else {
+                    alert(`You can select at most ${requiredOptions} option/options.`);
+                }
+            } else {
+                if (currentQuestionData.unit === 'yes' && currentQuestionData.unit_type === 'height') {
+                    const textInput = document.getElementById('heightInput');
+                    answer = textInput.value;
+                    const selectedUnitHeight = document.getElementById('selectedUnitHeight').value;
+                    answer += ` ${selectedUnitHeight}`; // Append the unit to the answer
+                } else if (currentQuestionData.unit === 'yes' && currentQuestionData.unit_type === 'weight') {
+                    const textInput = document.getElementById('weightInput');
+                    answer = textInput.value; // This line might throw an error if `answer` is not declared.
+                    const selectedUnitWeight = document.getElementById('selectedUnitWeight').value;
+                    answer += ` ${selectedUnitWeight}`; // Append the unit to the answer
+                    // Append the unit to the answer
+                } else {
+                    // Other text type questions
+                    const textInput = document.getElementById('ageInput');
+                    answer = textInput.value;
+                }
+
+                // Using getElementById for text input
+                const response = {
+                    question: currentQuestionData.question,
+                    answers: answer
+                };
+                // Send the response to Flask using an HTTP POST request
+                fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(response)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to submit response');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data); // Log the response from the server
+                        currentQuestion++;
+                        if (currentQuestion < totalQuestions) {
+                            updateQuestion();
+                        } else if (currentQuestion == totalQuestions) {
+                            // Redirect to the responses page when all questions are answered
+                            window.location.href = '/responses';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to submit response. Please try again.');
+                    });
+            }
+        }
+
         // Function to handle clicking the "Back" button
         function previousQuestion() {
             if (currentQuestion > 0) {
-                currentQuestion--; // Move to the previous question
-                updateQuestion(); // Update the displayed question
+                currentQuestion--;
+                updateQuestion();
+                // Move to the previous question
+                // Update the displayed question
             } else {
                 // Redirect to the '/' route
                 window.location.href = '/';
             }
         }
-
 
         // Event listener for checkbox changes
         function handleCheckboxChange() {
@@ -996,7 +957,5 @@ function nextQuestion() {
         updateQuestion();
     </script>
 
-
 </body>
-
 </html>
